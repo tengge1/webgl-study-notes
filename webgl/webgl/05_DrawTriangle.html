@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>05_DrawQuadrate</title>
+    <title>05_DrawTriangle</title>
     <link href="css/common.css" rel="stylesheet" />
 </head>
 <body>
@@ -48,18 +48,21 @@
         var vertexBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-            -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5
+            -0.7, 0.4,
+            -0.7, -0.5,
+            -0.3, 0.2,
+
+            0.2, 0.2,
+            0.8, -0.4,
+            0.6, 0.7
         ]), gl.STATIC_DRAW);
 
-        gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0); // 2表示数组中2个元素表示一个点
         gl.enableVertexAttribArray(aPosition);
 
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); // 4是顶点数量
+        gl.drawArrays(gl.TRIANGLES, 0, 6); // 6是顶点数量
 
-        // TRIANGLE_STRIP
-        // 创建一个三角形至少需要三个顶点，每一个新增的顶点都形成一个新的三角形。三角形将根据顶点序号的奇偶自行创建：
-        // 偶数环绕规则：T = [n-1, n-2, n]
-        // 奇数环绕规则：T = [n-2, n-1, n]
+        // gl.TRIANGLES三个点为一组，逆时针画三角形。
     </script>
 </body>
 </html>
