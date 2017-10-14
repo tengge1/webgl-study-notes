@@ -39,3 +39,5 @@
 19_UseTexture 使用纹理
 
 20_UseTextureRepeat 纹理重复方式
+
+21_UseTextureFlipY 翻转Y轴
