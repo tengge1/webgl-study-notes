@@ -75,8 +75,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="01_DrawPoint1.html" />
-    <Content Include="02_DrawPoint2.html" />
+    <Content Include="01_DrawPoint.html" />
+    <Content Include="02_DrawMultiPoint.html" />
     <Content Include="03_ClickPoint.html" />
     <Content Include="04_ClickColorPoint.html" />
     <Content Include="05_DrawTriangle.html" />
