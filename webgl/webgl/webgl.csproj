@@ -67,6 +67,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="resources\3objects.mqo" />
+    <Content Include="resources\cube.mqo" />
+    <Content Include="resources\cube.mtl" />
+    <Content Include="resources\cube.obj" />
+    <Content Include="resources\kaeru.mqo" />
+    <Content Include="resources\sphere.mqo" />
+    <Content Include="resources\vase.mqo" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -94,6 +101,21 @@
     <Content Include="07_DrawTriangleFan.html" />
     <Content Include="06_DrawTriangleStrip.html" />
     <Content Include="css\common.css" />
+    <Content Include="resources\7herbs.JPG" />
+    <Content Include="resources\blueflower.JPG" />
+    <Content Include="resources\blueflower2.JPG" />
+    <Content Include="resources\circle.gif" />
+    <Content Include="resources\lightblueflower.JPG" />
+    <Content Include="resources\numbers.png" />
+    <Content Include="resources\orange.JPG" />
+    <Content Include="resources\parasol.jpg" />
+    <Content Include="resources\particle.png" />
+    <Content Include="resources\pinkflower.JPG" />
+    <Content Include="resources\redflower.jpg" />
+    <Content Include="resources\sky.JPG" />
+    <Content Include="resources\sky_cloud.jpg" />
+    <Content Include="resources\sky_roof.JPG" />
+    <Content Include="resources\yellowflower.jpg" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
