@@ -80,6 +80,8 @@
     <Content Include="03_ClickPoint.html" />
     <Content Include="04_ClickColorPoint.html" />
     <Content Include="05_DrawTriangle.html" />
+    <Content Include="15_TranslateTriangleMatrix.html" />
+    <Content Include="14_TranslateTriangle.html" />
     <Content Include="13_ScaleTriangleMatrix.html" />
     <Content Include="12_RotateTriangleMatrix.html" />
     <Content Include="11_RotateTriangle.html" />

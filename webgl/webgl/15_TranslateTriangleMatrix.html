@@ -2,17 +2,17 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>13_ScaleTriangleMatrix</title>
+    <title>15_TranslateTriangleMatrix</title>
     <link href="css/common.css" rel="stylesheet" />
 </head>
 <body>
     <canvas id="mycanvas"></canvas>
     <script id="shader-vs" type="x-shader/x-vertex">
         attribute vec4 aPosition;
-        uniform mat4 uScale;
+        uniform mat4 uTranslate;
 
         void main() {
-        gl_Position = uScale * aPosition;
+        gl_Position = uTranslate * aPosition;
         }
     </script>
     <script id="shader-fs" type="x-shader/x-fragment">
@@ -42,7 +42,7 @@
         gl.useProgram(shaderProgram);
 
         var aPosition = gl.getAttribLocation(shaderProgram, 'aPosition');
-        var uScale = gl.getUniformLocation(shaderProgram, 'uScale');
+        var uTranslate = gl.getUniformLocation(shaderProgram, 'uTranslate');
 
         var vertexBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
@@ -61,12 +61,12 @@
             gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
             gl.enableVertexAttribArray(aPosition);
 
-            var scale = Math.abs(Math.cos(angle));
-            gl.uniformMatrix4fv(uScale, false, new Float32Array([
-                scale, 0.0, 0.0, 0.0,
-                0.0, scale, 0.0, 0.0,
-                0.0, 0.0, scale, 0.0,
-                0.0, 0.0, 0.0, 1.0
+            var translate = Math.cos(angle) * 0.3;
+            gl.uniformMatrix4fv(uTranslate, false, new Float32Array([
+                1.0, 0.0, 0.0, 0.0,
+                0.0, 1.0, 0.0, 0.0,
+                0.0, 0.0, 1.0, 0.0,
+                translate, translate, 0.0, 1.0,
             ]));
 
             gl.drawArrays(gl.TRIANGLES, 0, 3);
