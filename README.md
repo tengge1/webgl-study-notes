@@ -30,3 +30,9 @@
 
 15_TranslateTriangleMatrix 使用矩阵平移三角形
 
+16_ColorTriangle 给三角形染颜色
+
+17_ColorFragCoord 通过gl_FragCoord给三角形染颜色
+
+18_VertexAndColor 将顶点位置和颜色放到同一个缓冲区
+
