@@ -36,3 +36,6 @@
 
 18_VertexAndColor 将顶点位置和颜色放到同一个缓冲区
 
+19_UseTexture 使用纹理
+
+20_UseTextureRepeat 纹理重复方式
