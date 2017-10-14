@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>16_ColorTriangle</title>
+    <link href="css/common.css" rel="stylesheet" />
+</head>
+<body>
+    <canvas id="mycanvas"></canvas>
+    <script id="shader-vs" type="x-shader/x-vertex">
+        attribute vec4 aPosition;
+        attribute vec4 aColor;
+
+        varying vec4 vColor;
+
+        void main() {
+        gl_Position = aPosition;
+        vColor = aColor;
+        }
+    </script>
+    <script id="shader-fs" type="x-shader/x-fragment">
+        precision mediump float;
+
+        varying vec4 vColor;
+
+        void main() {
+        gl_FragColor = vColor;
+        }
+    </script>
+    <script>
+        var canvas = document.getElementById('mycanvas');
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+
+        var gl = canvas.getContext('webgl');
+
+        var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+        gl.shaderSource(vertexShader, document.getElementById('shader-vs').innerHTML);
+        gl.compileShader(vertexShader);
+
+        var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+        gl.shaderSource(fragmentShader, document.getElementById('shader-fs').innerHTML);
+        gl.compileShader(fragmentShader);
+
+        var shaderProgram = gl.createProgram();
+        gl.attachShader(shaderProgram, vertexShader);
+        gl.attachShader(shaderProgram, fragmentShader);
+        gl.linkProgram(shaderProgram);
+        gl.useProgram(shaderProgram);
+
+        var aPosition = gl.getAttribLocation(shaderProgram, 'aPosition');
+        var aColor = gl.getAttribLocation(shaderProgram, 'aColor');
+
+        var vertexBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+            -0.7, 0.4,
+            -0.7, -0.5,
+            -0.3, 0.2
+        ]), gl.STATIC_DRAW);
+
+        var colorBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+            1.0, 0.0, 0.0,
+            0.0, 1.0, 0.0,
+            0.0, 0.0, 1.0
+        ]), gl.STATIC_DRAW);
+
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+        gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(aPosition);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+        gl.vertexAttribPointer(aColor, 3, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(aColor);
+
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+    </script>
+</body>
+</html>
