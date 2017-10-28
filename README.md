@@ -63,3 +63,6 @@
 31_AmbientLight 环境光
 
 32_PointLight 点光源
+
+33_LightingSphere 球体
+
