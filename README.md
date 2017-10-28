@@ -61,3 +61,5 @@
 30_LightingCube 光照（平行光）
 
 31_AmbientLight 环境光
+
+32_PointLight 点光源
