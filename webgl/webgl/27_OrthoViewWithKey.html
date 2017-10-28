@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>26_RotateTriangleWithKey</title>
+    <title>27_OrthoViewWithKey</title>
     <link href="css/common.css" rel="stylesheet" />
     <script src="js/gl-matrix.js"></script>
 </head>
@@ -60,7 +60,7 @@
 
         // 模型矩阵
         var model = mat4.create();
-        mat4.rotateX(model, mat4.create(), 0);
+        mat4.rotateZ(model, mat4.create(), 0);
         gl.uniformMatrix4fv(uModelMatrix, false, model);
 
         // 视图矩阵
@@ -70,7 +70,7 @@
 
         // 投影矩阵
         var proj = mat4.create();
-        mat4.perspective(proj, Math.PI * 90 / 180, canvas.width / canvas.height, 1, 10000);
+        mat4.ortho(proj, -1, 1, -1, 1, 0.1, 3);
         gl.uniformMatrix4fv(uProjMatrix, false, proj);
 
         // 顶点位置矩阵
@@ -103,18 +103,23 @@
         gl.drawArrays(gl.TRIANGLES, 0, 9);
 
         // 左右方向键事件
-        var angle = 0;
+        var near = 0.1;
+        var far = 3;
         document.onkeydown = function (event) {
             if (event.keyCode == 37) { // 左方向键
-                angle += 5
+                near -= 0.1
             } else if (event.keyCode == 39) { // 右方向键
-                angle -= 5;
+                near += 0.1;
+            } else if (event.keyCode == 38) { // 上方向键
+                far -= 0.1
+            } else if (event.keyCode == 40) { // 下方向键
+                far += 0.1;
             }
 
-            mat4.rotateX(model, mat4.create(), Math.PI * angle / 180);
-            gl.uniformMatrix4fv(uModelMatrix, false, model);
+            mat4.ortho(proj, -1, 1, -1, 1, near, far);
+            gl.uniformMatrix4fv(uProjMatrix, false, proj);
 
-            gl.clear(gl.COLOR_BUFFER_BIT );
+            gl.clear(gl.COLOR_BUFFER_BIT);
             gl.drawArrays(gl.TRIANGLES, 0, 9);
         }
     </script>
