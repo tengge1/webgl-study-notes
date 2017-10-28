@@ -66,6 +66,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="25_RotateTriangle.html" />
     <Content Include="24_DepthBuffer.html" />
     <Content Include="23_ColorCube.html" />
     <Content Include="22_Cube.html" />
