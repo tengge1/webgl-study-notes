@@ -57,3 +57,5 @@
 28_Zfighting 使用PolygonOffset解决ZFighting问题（两个面共面绘制问题）
 
 29_RotateCubeWithKey 使用上下左右旋转带颜色的正方体
+
+30_LightingCube 光照（平行光）
