@@ -66,6 +66,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="28_Zfighting.html" />
     <Content Include="27_OrthoViewWithKey.html" />
     <Content Include="26_RotateTriangleWithKey.html" />
     <Content Include="25_RotateTriangle.html" />
