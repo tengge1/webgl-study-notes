@@ -42,8 +42,18 @@
 
 21_UseTextureFlipY 翻转Y轴
 
-22_Cube 立方体（颜色插值、MVP矩阵）
+22_Cube 立方体（颜色插值、VP矩阵）
 
 23_ColorCube 带颜色的立方体（每个面一个颜色）
 
-24_DepthBuffer 深度测试
+24_DepthBuffer 深度测试（DEPTH_TEST）
+
+25_RotateTriangle 旋转三角形（MVP矩阵）
+
+26_RotateTriangleWithKey 使用左右方向键旋转三角形
+
+27_OrthoViewWithKey 正视投影（使用上下左右控制near和far的大小）
+
+28_Zfighting 使用PolygonOffset解决ZFighting问题（两个面共面绘制问题）
+
+29_RotateCubeWithKey 使用上下左右旋转带颜色的正方体
