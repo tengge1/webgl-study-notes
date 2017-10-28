@@ -59,3 +59,5 @@
 29_RotateCubeWithKey 使用上下左右旋转带颜色的正方体
 
 30_LightingCube 光照（平行光）
+
+31_AmbientLight 环境光

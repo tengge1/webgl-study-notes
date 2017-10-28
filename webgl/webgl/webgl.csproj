@@ -66,6 +66,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="31_AmbientLight.html" />
     <Content Include="30_LightingCube.html" />
     <Content Include="29_RotateCubeWithKey.html" />
     <Content Include="28_Zfighting.html" />
