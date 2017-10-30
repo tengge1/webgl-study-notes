@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>33_LightingSphere</title>
+    <title>34_MoveAround</title>
     <link href="css/common.css" rel="stylesheet" />
     <script src="js/gl-matrix.js"></script>
 </head>
@@ -34,12 +34,12 @@
         vec3 diffuseDL = uDiffuseLightColor * aColor.rgb * nDotDL;
 
         vec3 ambient = uAmbientLight * aColor.rgb;
-        
+
         vec4 vertexPosition = uModelMatrix * aPosition;
         vec3 lightDirection = normalize(uPointLightPosition - vec3(vertexPosition));
         float nDotPL = max(dot(lightDirection, normal), 0.0);
         vec3 diffusePL = uPointLightColor * aColor.rgb * nDotPL;
-        
+
         vColor = vec4(diffuseDL + ambient + diffusePL, aColor.a);
         }
     </script>
@@ -165,7 +165,7 @@
 
         // 视图矩阵
         var view = mat4.create();
-        mat4.lookAt(view, vec3.fromValues(1, 1, 1), vec3.fromValues(0, 0, 0, 0), vec3.fromValues(1, 0, 0));
+        mat4.lookAt(view, vec3.fromValues(3, 3, 3), vec3.fromValues(0, 0, 0), vec3.fromValues(1, 0, 0));
         gl.uniformMatrix4fv(uViewMatrix, false, view);
 
         // 投影矩阵
@@ -185,8 +185,8 @@
         gl.uniform3f(uAmbientLight, 0.1, 0.1, 0.1);
 
         // 点光源
-        gl.uniform3f(uPointLightColor, 0.8, 0.8, 0.8);
-        gl.uniform3f(uPointLightPosition, 1.3, 1.2, 1.1);
+        gl.uniform3f(uPointLightColor, 1.0, 1.0, 1.0);
+        gl.uniform3f(uPointLightPosition, 5.3, 1.2, -1.1);
 
         // 索引矩阵
         var indexBuffer = gl.createBuffer();
@@ -196,29 +196,47 @@
         // 渲染
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+
+        var angle = 0;
+
+        var render = function () {
+            requestAnimationFrame(render);
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+            // 球1
+            model = mat4.create();
+            mat4.translate(model, model, vec3.fromValues(0, 0, 0));
+            gl.uniformMatrix4fv(uModelMatrix, false, model);
+            gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+
+            // 球2
+            model = mat4.create();
+            mat4.translate(model, model, vec3.fromValues(1.6 * Math.cos(angle), 0, 1.6 * Math.sin(angle)));
+            mat4.scale(model, model, vec3.fromValues(0.5, 0.5, 0.5));
+            gl.uniformMatrix4fv(uModelMatrix, false, model);
+            gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+
+            angle += Math.PI / 180 * 1;
+        }
+        render();
 
         // 左右方向键事件
-        var xAxisAngle = 0;
-        var yAxisAngle = 0;
+        var far = 0.0;
+        var pos = 0;
         document.onkeydown = function (event) {
             if (event.keyCode == 37) { // 左方向键
-                xAxisAngle += 5
+                pos += 0.1;
             } else if (event.keyCode == 39) { // 右方向键
-                xAxisAngle -= 5;
+                pos -= 0.1;
             } else if (event.keyCode == 38) { // 上方向键
-                yAxisAngle += 5;
+                far += 0.1;
             } else if (event.keyCode == 40) { // 下方向键
-                yAxisAngle -= 5;
+                far -= 0.1;
             }
 
-            mat4.rotateX(model, mat4.create(), Math.PI * xAxisAngle / 180);
-            mat4.rotateY(model, model, Math.PI * yAxisAngle / 180);
-            gl.uniformMatrix4fv(uModelMatrix, false, model);
-
-            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-            gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+            var view = mat4.create();
+            mat4.lookAt(view, vec3.fromValues(3 + far, 3 + far, 3 + far), vec3.fromValues(pos, 0, 0), vec3.fromValues(0, 1, 0));
+            gl.uniformMatrix4fv(uViewMatrix, false, view);
         }
     </script>
 </body>
