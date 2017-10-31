@@ -66,6 +66,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="35_TestClick.html" />
     <Content Include="34_MoveAround.html" />
     <Content Include="33_LightingSphere.html" />
     <Content Include="32_PointLight.html" />

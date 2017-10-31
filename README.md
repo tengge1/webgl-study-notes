@@ -66,4 +66,6 @@
 
 33_LightingSphere 球体
 
-34_MoveAround 一个球围着另一个球转
+34_MoveAround 一个球围着另一个球转（多个物体同时运动）
+
+35_TestClick 点击正方体（如何判断是否点击到正方体）
