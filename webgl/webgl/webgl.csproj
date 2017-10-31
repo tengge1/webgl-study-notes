@@ -66,6 +66,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="36_BlendCube.html" />
     <Content Include="35_TestClick.html" />
     <Content Include="34_MoveAround.html" />
     <Content Include="33_LightingSphere.html" />
