@@ -182,10 +182,10 @@
         gl.uniform3fv(uDiffuseLightDirection, direction);
 
         // 环境光
-        gl.uniform3f(uAmbientLight, 0.1, 0.1, 0.1);
+        gl.uniform3f(uAmbientLight, 0.3, 0.3, 0.3);
 
         // 点光源
-        gl.uniform3f(uPointLightColor, 1.0, 1.0, 1.0);
+        gl.uniform3f(uPointLightColor, 0.8, 0.8, 0.8);
         gl.uniform3f(uPointLightPosition, 5.3, 1.2, -1.1);
 
         // 索引矩阵
@@ -211,12 +211,18 @@
 
             // 球2
             model = mat4.create();
-            mat4.translate(model, model, vec3.fromValues(1.6 * Math.cos(angle), 0, 1.6 * Math.sin(angle)));
+            mat4.translate(model, model, vec3.fromValues(1.8 * Math.cos(angle), 0, 1.8 * Math.sin(angle)));
             mat4.scale(model, model, vec3.fromValues(0.5, 0.5, 0.5));
             gl.uniformMatrix4fv(uModelMatrix, false, model);
             gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
 
             angle += Math.PI / 180 * 1;
+
+            // 球3
+            mat4.translate(model, model, vec3.fromValues(0, 1.6 * Math.cos(angle), 1.6 * Math.sin(angle)));
+            mat4.scale(model, model, vec3.fromValues(0.3, 0.3, 0.3));
+            gl.uniformMatrix4fv(uModelMatrix, false, model);
+            gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
         }
         render();
 
