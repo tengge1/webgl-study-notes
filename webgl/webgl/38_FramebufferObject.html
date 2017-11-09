@@ -67,6 +67,8 @@
         var uProjMatrix = gl.getUniformLocation(shaderProgram, 'uProjMatrix');
         var uSampler = gl.getUniformLocation(shaderProgram, 'uSampler');
 
+        /******************************************** 正方体 *********************************************/
+
         // 模型矩阵
         var model = mat4.create();
         mat4.rotateX(model, mat4.create(), 0);
@@ -113,8 +115,8 @@
         gl.enableVertexAttribArray(aColor);
 
         // uv坐标矩阵
-        var colorBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+        var uvBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
           1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,    // v0-v1-v2-v3 front
           0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0,    // v0-v3-v4-v5 right
@@ -151,19 +153,95 @@
         };
         image.src = 'resources/sky_cloud.jpg';
 
+        /******************************************** 平板 *****************************************************/
+
+        // 模型矩阵
+        var model2 = mat4.create();
+        mat4.rotateX(model2, mat4.create(), 0);
+        gl.uniformMatrix4fv(uModelMatrix, false, model2);
+
+        // 视图矩阵
+        var view2 = mat4.create();
+        mat4.lookAt(view2, vec3.fromValues(1, 2, 3), vec3.fromValues(0, 0, 0, 0), vec3.fromValues(1, 0, 0));
+        gl.uniformMatrix4fv(uViewMatrix, false, view);
+
+        // 投影矩阵
+        var proj2 = mat4.create();
+        mat4.perspective(proj2, Math.PI * 90 / 180, canvas.width / canvas.height, 0.1, 10000);
+        gl.uniformMatrix4fv(uProjMatrix, false, proj2);
+
+        // 顶点位置矩阵
+        var positionBuffer2 = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer2);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+             -1.0, -1.0, 0.0,
+             1.0, -1.0, 0.0,
+             1.0, 1.0, 0.0,
+             -1.0, 1.0, 0.0
+        ]), gl.STATIC_DRAW);
+
+        gl.vertexAttribPointer(aPosition, 3, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(aPosition);
+
+        // 顶点颜色矩阵
+        var colorBuffer2 = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer2);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+            0.4, 0.4, 0.4,
+            0.4, 0.4, 0.4,
+            0.4, 0.4, 0.4,
+            0.4, 0.4, 0.4,
+        ]), gl.STATIC_DRAW);
+
+        gl.vertexAttribPointer(aColor, 3, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(aColor);
+
+        // uv坐标矩阵
+        var uvBuffer2 = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer2);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+            0.0, 0.0,
+            1.0, 0.0,
+            1.0, 1.0,
+            0.0, 1.0
+        ]), gl.STATIC_DRAW);
+
+        gl.vertexAttribPointer(aTexCoord, 2, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(aTexCoord);
+
+        // 索引矩阵
+        var indexBuffer2 = gl.createBuffer();
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer2);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array([
+             0, 1, 2,
+             0, 2, 3,
+        ]), gl.STATIC_DRAW);
+
+        // 纹理
+        var texture2 = gl.createTexture();
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+        gl.bindTexture(gl.TEXTURE_2D, texture2);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        //gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+        gl.uniform1i(uSampler, 0);
+
+        /*************************************** 绘制 ************************************************/
+
         // 创建帧缓存
         var frameBuffer = gl.createFramebuffer();
+        gl.bindFramebuffer(gl.FRAMEBUFFER, frameBuffer);
+        frameBuffer.width = 256;
+        frameBuffer.height = 256;
+
         var frameTexture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, OFFSCREEN_WIDTH, OFFSCREEN_HEIGHT, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+        gl.bindTexture(gl.TEXTURE_2D, frameTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 256, 256, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        frameBuffer.texture = texture;
+        frameBuffer.texture = frameTexture;
 
         var depthBuffer = gl.createRenderbuffer();
         gl.bindRenderbuffer(gl.RENDERBUFFER, depthBuffer);
-        gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, OFFSCREEN_WIDTH, OFFSCREEN_HEIGHT);
-
-        gl.bindFramebuffer(gl.FRAMEBUFFER, frameBuffer);
+        gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, 256, 256);
         gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
         gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, depthBuffer);
 
@@ -177,16 +255,31 @@
         var render = function () {
             xAxisAngle += Math.PI / 180;
             yAxisAngle += Math.PI / 180;
-
             mat4.rotateX(model, mat4.create(), xAxisAngle);
             mat4.rotateY(model, model, xAxisAngle);
             gl.uniformMatrix4fv(uModelMatrix, false, model);
 
+            // 绘制正方体
+            gl.bindFramebuffer(gl.FRAMEBUFFER, frameBuffer);
+            gl.viewport(0, 0, 255, 255);
+            gl.clearColor(0.2, 0.2, 0.4, 1.0);
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-            if (image.complete) {
-                gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_BYTE, 0);
-            }
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+            gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+            gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_BYTE, 0);
+
+            // 绘制平板
+            gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+            gl.viewport(0, 0, canvas.width, canvas.height);
+            gl.clearColor(0.0, 0.0, 0.0, 1.0);
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+            //if (image.complete) {
+            //    gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_BYTE, 0);
+            //}
         }
 
         var tick = function () {
