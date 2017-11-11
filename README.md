@@ -76,4 +76,4 @@
 
 38 FramebufferObject 帧缓冲区的使用（3D笔记本屏幕里演示3D物体效果）
 
-> 《WebGL编程指南》光盘源码：https://github.com/tengge1/webgl-guide-code.git
+> 《WebGL编程指南》光盘源码：https://github.com/tengge1/webgl-guide-code
