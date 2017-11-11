@@ -73,3 +73,5 @@
 36_BlendCube 颜色混合
 
 37_Fog 雾效
+
+38_FramebufferObject 帧缓冲区的使用（3D笔记本屏幕里演示3D物体效果）
