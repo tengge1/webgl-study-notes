@@ -66,6 +66,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="39_2D3D.html" />
     <Content Include="38_FramebufferObject.html" />
     <Content Include="37_Fog.html" />
     <Content Include="36_BlendCube.html" />
