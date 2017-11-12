@@ -1,4 +1,4 @@
-# 《WebGL编程指南》学习笔记
+﻿# 《WebGL编程指南》学习笔记
 
 01 DrawPoint 画点
 
@@ -75,5 +75,7 @@
 37 Fog 雾效
 
 38 FramebufferObject 帧缓冲区的使用（3D笔记本屏幕里演示3D物体效果）
+
+39 2D3D 在3D中用半透明平板显示2D文字图形信息
 
 > 《WebGL编程指南》光盘源码：https://github.com/tengge1/webgl-guide-code
