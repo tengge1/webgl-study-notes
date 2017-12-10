@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>26_RotateTriangleWithKey</title>
+    <link href="css/common.css" rel="stylesheet" />
+    <script src="js/gl-matrix.js"></script>
+</head>
+<body>
+    <canvas id="mycanvas"></canvas>
+    <script id="shader-vs" type="x-shader/x-vertex">
+        attribute vec4 aPosition;
+        attribute vec4 aColor;
+        uniform mat4 uModelMatrix;
+        uniform mat4 uViewMatrix;
+        uniform mat4 uProjMatrix;
+
+        varying vec4 vColor;
+
+        void main() {
+        gl_Position = uProjMatrix *  uViewMatrix * uModelMatrix * aPosition;
+        vColor = aColor;
+        }
+    </script>
+    <script id="shader-fs" type="x-shader/x-fragment">
+        precision mediump float;
+
+        varying vec4 vColor;
+
+        void main() {
+        gl_FragColor = vColor;
+        }
+    </script>
+    <script>
+        var canvas = document.getElementById('mycanvas');
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+
+        var gl = canvas.getContext('webgl');
+
+        var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+        gl.shaderSource(vertexShader, document.getElementById('shader-vs').innerHTML);
+        gl.compileShader(vertexShader);
+
+        var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+        gl.shaderSource(fragmentShader, document.getElementById('shader-fs').innerHTML);
+        gl.compileShader(fragmentShader);
+
+        var shaderProgram = gl.createProgram();
+        gl.attachShader(shaderProgram, vertexShader);
+        gl.attachShader(shaderProgram, fragmentShader);
+        gl.linkProgram(shaderProgram);
+        gl.useProgram(shaderProgram);
+
+        var aPosition = gl.getAttribLocation(shaderProgram, 'aPosition');
+        var aColor = gl.getAttribLocation(shaderProgram, 'aColor');
+        var uModelMatrix = gl.getUniformLocation(shaderProgram, 'uModelMatrix');
+        var uViewMatrix = gl.getUniformLocation(shaderProgram, 'uViewMatrix');
+        var uProjMatrix = gl.getUniformLocation(shaderProgram, 'uProjMatrix');
+
+        // 模型矩阵
+        var model = mat4.create();
+        mat4.rotateX(model, mat4.create(), 0);
+        gl.uniformMatrix4fv(uModelMatrix, false, model);
+
+        // 视图矩阵
+        var view = mat4.create();
+        mat4.lookAt(view, vec3.fromValues(1, 1, 1), vec3.fromValues(0, 0, 0, 0), vec3.fromValues(1, 0, 0));
+        gl.uniformMatrix4fv(uViewMatrix, false, view);
+
+        // 投影矩阵
+        var proj = mat4.create();
+        mat4.perspective(proj, Math.PI * 90 / 180, canvas.width / canvas.height, 1, 10000);
+        gl.uniformMatrix4fv(uProjMatrix, false, proj);
+
+        // 顶点位置矩阵
+        var vertexBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+             0.0, 0.5, -0.4, 0.4, 1.0, 0.4, // The back green one
+            -0.5, -0.5, -0.4, 0.4, 1.0, 0.4,
+             0.5, -0.5, -0.4, 1.0, 0.4, 0.4,
+
+             0.5, 0.4, -0.2, 1.0, 0.4, 0.4, // The middle yellow one
+            -0.5, 0.4, -0.2, 1.0, 1.0, 0.4,
+             0.0, -0.6, -0.2, 1.0, 1.0, 0.4,
+
+             0.0, 0.5, 0.0, 0.4, 0.4, 1.0,  // The front blue one
+            -0.5, -0.5, 0.0, 0.4, 0.4, 1.0,
+             0.5, -0.5, 0.0, 1.0, 0.4, 0.4,
+        ]), gl.STATIC_DRAW);
+
+        gl.vertexAttribPointer(aPosition, 3, gl.FLOAT, false, Float32Array.BYTES_PER_ELEMENT * 6, 0);
+        gl.enableVertexAttribArray(aPosition);
+
+        gl.vertexAttribPointer(aColor, 3, gl.FLOAT, false, Float32Array.BYTES_PER_ELEMENT * 6, Float32Array.BYTES_PER_ELEMENT * 3);
+        gl.enableVertexAttribArray(aColor);
+
+        // 渲染
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        gl.enable(gl.DEPTH_TEST);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        gl.drawArrays(gl.TRIANGLES, 0, 9);
+
+        // 左右方向键事件
+        var angle = 0;
+        document.onkeydown = function (event) {
+            if (event.keyCode == 37) { // 左方向键
+                angle += 5
+            } else if (event.keyCode == 39) { // 右方向键
+                angle -= 5;
+            }
+
+            mat4.rotateX(model, mat4.create(), Math.PI * angle / 180);
+            gl.uniformMatrix4fv(uModelMatrix, false, model);
+
+            gl.clear(gl.COLOR_BUFFER_BIT );
+            gl.drawArrays(gl.TRIANGLES, 0, 9);
+        }
+    </script>
+</body>
+</html>

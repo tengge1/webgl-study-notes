@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>18_VertexAndColor</title>
+    <link href="css/common.css" rel="stylesheet" />
+</head>
+<body>
+    <canvas id="mycanvas"></canvas>
+    <script id="shader-vs" type="x-shader/x-vertex">
+        attribute vec4 aPosition;
+        attribute vec4 aColor;
+
+        varying vec4 vColor;
+
+        void main() {
+        gl_Position = aPosition;
+        vColor = aColor;
+        }
+    </script>
+    <script id="shader-fs" type="x-shader/x-fragment">
+        precision mediump float;
+
+        varying vec4 vColor;
+
+        void main() {
+        gl_FragColor = vColor;
+        }
+    </script>
+    <script>
+        var canvas = document.getElementById('mycanvas');
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+
+        var gl = canvas.getContext('webgl');
+
+        var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+        gl.shaderSource(vertexShader, document.getElementById('shader-vs').innerHTML);
+        gl.compileShader(vertexShader);
+
+        var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+        gl.shaderSource(fragmentShader, document.getElementById('shader-fs').innerHTML);
+        gl.compileShader(fragmentShader);
+
+        var shaderProgram = gl.createProgram();
+        gl.attachShader(shaderProgram, vertexShader);
+        gl.attachShader(shaderProgram, fragmentShader);
+        gl.linkProgram(shaderProgram);
+        gl.useProgram(shaderProgram);
+
+        var aPosition = gl.getAttribLocation(shaderProgram, 'aPosition');
+        var aColor = gl.getAttribLocation(shaderProgram, 'aColor');
+
+        var vertexAndColorBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertexAndColorBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+            0.0, 0.5, 1.0, 0.0, 0.0,
+            -0.5, -0.5, 0.0, 1.0, 0.0,
+            0.5, -0.5, 0.0, 0.0, 1.0
+        ]), gl.STATIC_DRAW);
+
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertexAndColorBuffer);
+        var fsize = Float32Array.BYTES_PER_ELEMENT;
+        gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 5 * fsize, 0 * fsize);
+        gl.enableVertexAttribArray(aPosition);
+
+        gl.vertexAttribPointer(aColor, 3, gl.FLOAT, false, 5 * fsize, 2 * fsize);
+        gl.enableVertexAttribArray(aColor);
+
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+        // gl.vertexAttribPointer(index, size, type, normalized, stride, pointer);
+        // index: 属性索引值，通过getAttribLocation获取。
+        // size: 每个顶点属性组件数量，必须是1、2、3或4。例如，位置为3（xyz），颜色为4（rgba）。
+        // type：每个组件数据类型，可以是GL_BYTE，GL_UNSIGNED_BYTE，GL_SHORT，GL_UNSIGNED_SHORT，GL_FIXED或GL_FLOAT，默认是GL_FLOAT。
+        // normalized：当被访问时，数据点是否应该归一化（转换为单位向量）。
+        // stride：连续顶点属性之间的偏移量（字节）。例如，上面程序中，每5个组件为一组，float为4个字节，所以偏移量为20。
+        // pointer：该属性在每组中的偏移量（字节）。例如，上面程序中，颜色从每组第三个组件开始读取，float为4个字节，所以颜色的偏移量为(3-1)*4=8。
+    </script>
+</body>
+</html>
