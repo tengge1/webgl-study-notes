@@ -212,9 +212,9 @@
         ctx.fillText('平板是半透明的，这是写在平板上的一些字。', 30, 300);
 
         var texture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.activeTexture(gl.TEXTURE0);
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
-        gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas2d);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
@@ -253,6 +253,19 @@
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
             gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_BYTE, 0);
 
+            // 在平板上写字
+            ctx.fillStyle = 'rgba(1,0,0,0.2)';
+            //ctx.fillRect(0, 0, canvas2d.width, canvas2d.height);
+            //gl.bindTexture(gl.TEXTURE_2D, texture);
+            //gl.activeTexture(gl.TEXTURE0);
+            //gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+            gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, gl.RGBA, gl.UNSIGNED_BYTE, canvas2d);
+            //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+            //gl.uniform1i(uSampler, 0);
+
             // 绘制2d物体
             mat4.rotateX(model, mat4.create(), 0);
             gl.uniformMatrix4fv(uModelMatrix, false, model);
@@ -261,7 +274,6 @@
             gl.uniform1i(uUseTexture, 1);
             gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer2);
             gl.vertexAttribPointer(aTexCoord, 2, gl.FLOAT, false, 0, 0);
-
             gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer2);
             gl.vertexAttribPointer(aPosition, 3, gl.FLOAT, false, 0, 0);
             gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer2);
